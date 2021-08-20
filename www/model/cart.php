@@ -1,7 +1,10 @@
 <?php 
+//関数ファイルを読み込み
 require_once MODEL_PATH . 'functions.php';
+//dbファイルを読み込み
 require_once MODEL_PATH . 'db.php';
 
+//カートに追加するためのデータ
 function get_user_carts($db, $user_id){
   $sql = "
     SELECT
@@ -25,7 +28,7 @@ function get_user_carts($db, $user_id){
   ";
   return fetch_all_query($db, $sql);
 }
-
+//カートに追加するためのデータ
 function get_user_cart($db, $user_id, $item_id){
   $sql = "
     SELECT
@@ -54,6 +57,7 @@ function get_user_cart($db, $user_id, $item_id){
 
 }
 
+//カートに商品を追加
 function add_cart($db, $user_id, $item_id ) {
   $cart = get_user_cart($db, $user_id, $item_id);
   if($cart === false){
@@ -62,6 +66,7 @@ function add_cart($db, $user_id, $item_id ) {
   return update_cart_amount($db, $cart['cart_id'], $cart['amount'] + 1);
 }
 
+//1以上の整数が有効
 function insert_cart($db, $user_id, $item_id, $amount = 1){
   $sql = "
     INSERT INTO
@@ -76,6 +81,7 @@ function insert_cart($db, $user_id, $item_id, $amount = 1){
   return execute_query($db, $sql);
 }
 
+//カートの数量変更
 function update_cart_amount($db, $cart_id, $amount){
   $sql = "
     UPDATE
@@ -89,6 +95,7 @@ function update_cart_amount($db, $cart_id, $amount){
   return execute_query($db, $sql);
 }
 
+//カートの削除
 function delete_cart($db, $cart_id){
   $sql = "
     DELETE FROM
@@ -101,6 +108,7 @@ function delete_cart($db, $cart_id){
   return execute_query($db, $sql);
 }
 
+//購入処理
 function purchase_carts($db, $carts){
   if(validate_cart_purchase($carts) === false){
     return false;
@@ -118,6 +126,7 @@ function purchase_carts($db, $carts){
   delete_user_carts($db, $carts[0]['user_id']);
 }
 
+//カートの中身を処理
 function delete_user_carts($db, $user_id){
   $sql = "
     DELETE FROM
@@ -129,7 +138,7 @@ function delete_user_carts($db, $user_id){
   execute_query($db, $sql);
 }
 
-
+//商品の金額
 function sum_carts($carts){
   $total_price = 0;
   foreach($carts as $cart){

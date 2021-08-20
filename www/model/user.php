@@ -1,7 +1,10 @@
 <?php
+//関数ファイルを読み込み
 require_once MODEL_PATH . 'functions.php';
+//dbファイルの読み込み
 require_once MODEL_PATH . 'db.php';
 
+//user_id取得
 function get_user($db, $user_id){
   $sql = "
     SELECT
@@ -19,6 +22,7 @@ function get_user($db, $user_id){
   return fetch_query($db, $sql);
 }
 
+//user_name取得
 function get_user_by_name($db, $name){
   $sql = "
     SELECT
@@ -70,6 +74,7 @@ function is_valid_user($name, $password, $password_confirmation){
   return $is_valid_user_name && $is_valid_password ;
 }
 
+//入力チェク
 function is_valid_user_name($name) {
   $is_valid = true;
   if(is_valid_length($name, USER_NAME_LENGTH_MIN, USER_NAME_LENGTH_MAX) === false){
@@ -83,6 +88,7 @@ function is_valid_user_name($name) {
   return $is_valid;
 }
 
+//入力チェク
 function is_valid_password($password, $password_confirmation){
   $is_valid = true;
   if(is_valid_length($password, USER_PASSWORD_LENGTH_MIN, USER_PASSWORD_LENGTH_MAX) === false){
@@ -100,6 +106,7 @@ function is_valid_password($password, $password_confirmation){
   return $is_valid;
 }
 
+//データベースに登録
 function insert_user($db, $name, $password){
   $sql = "
     INSERT INTO

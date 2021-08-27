@@ -24,6 +24,6 @@ $user = get_login_user($db);
 
 //オープンアイテムのデータを取得
 $items = get_open_items($db);
-
+$token = get_csrf_token();
 //ビューを読み込み
 include_once VIEW_PATH . 'index_view.php';

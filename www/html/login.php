@@ -12,6 +12,6 @@ if(is_logined() === true){
   //ログインしてない場合はホームにリダイレクト
   redirect_to(HOME_URL);
 }
-
+$token = get_csrf_token();
 //ビューを読み込み
 include_once VIEW_PATH . 'login_view.php';

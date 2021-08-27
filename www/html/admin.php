@@ -30,6 +30,6 @@ if(is_admin($user) === false){
 
 //アイテムズデータを取得
 $items = get_all_items($db);
-
+$token = get_csrf_token();
 //ビューの読み込み
 include_once VIEW_PATH . '/admin_view.php';

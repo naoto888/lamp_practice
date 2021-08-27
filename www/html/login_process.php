@@ -8,7 +8,12 @@ require_once MODEL_PATH . 'user.php';
 
 //ログインチェックを行うため、セッションを開始
 session_start();
-
+$token = get_post('token');
+if(is_valid_csrf_token($token) === false){
+  unset($_SESSION['csrf_token']);
+  redirect_to(LOGIN_URL);
+}
+unset($_SESSION['csrf_token']);
 //ログインチェック用関数を利用
 if(is_logined() === true){
   //ログインしてない場合はログインページにリダイレクト

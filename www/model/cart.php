@@ -166,3 +166,59 @@ function validate_cart_purchase($carts){
   return true;
 }
 
+function insert_history($db, $user_id, $total_price){
+  $sql = "
+  INSERT INTO
+      history(
+        user_id,
+        total_price
+      )
+    VALUES(:user_id, :total_price)
+  ";
+
+  return execute_query($db, $sql,array(':user_id' => $user_id, ':total_price' => $total_price));
+}
+
+function get_details($db, $order_id){
+  $sql = "
+    SELECT
+      details.price,
+      details.amount,
+      details.price,
+      items.name
+    FROM
+      details
+    JOIN
+      items
+    ON
+      details.item_id = items.item_id
+    WHERE
+      details.order_id = :order_id
+  ";
+  return fetch_all_query($db, $sql,array(':order_id' => $order_id));
+}
+
+function insert_details($db,$carts,$order_id){
+  
+  foreach($carts as $cart){
+    if(insert_detail($db,$order_id,$cart['item_id'],$cart['price'],$cart['amount']) === false){
+      return false;
+    }
+  }
+  return true;
+}
+
+function insert_detail($db, $order_id, $item_id, $price, $amount){
+  $sql = "
+    INSERT INTO
+      details(
+        order_id,
+        item_id,
+        price,
+        amount
+      )
+    VALUES(:order_id, :item_id, :price, :amount)
+  ";
+
+return execute_query($db, $sql,array(':order_id' => $order_id,':item_id' => $item_id,':price' => $price,':amount' => $amount));
+}

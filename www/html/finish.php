@@ -39,5 +39,23 @@ if(purchase_carts($db, $carts) === false){
 
 $total_price = sum_carts($carts);
 
+//トランザクション開始
+$db->beginTransaction();
+//historyテーブルにuser_id,total_priceを追加する、失敗した時ロールバック、CART＿URLにリダイレクト
+if(insert_history($db, $user['user_id'], $total_price) === false){
+  $db->rollback();
+  redirect_to(CART_URL);
+}
+
+//$dbh->lastInsertId();historyテーブルのoder_idを取得する
+$order_id = $db->lastInsertId();
+//$catsを使ってdetailsテーブルを追加する、失敗した時ロールバック、CART＿URLにリダイレクト
+if(insert_details($db,$carts,$order_id) === false){
+  $db->rollback();
+  redirect_to(CART_URL);
+} 
+
+//コミットをする
+$db->commit();
 //ビューの読み込み
 include_once '../view/finish_view.php';

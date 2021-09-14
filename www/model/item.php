@@ -217,3 +217,19 @@ function is_valid_item_status($status){
   }
   return $is_valid;
 }
+
+function get_ranking($db){
+  $sql ='
+  SELECT
+    items.name,
+    sum(details.amount)
+  FROM
+    items
+  INNER JOIN
+    details
+  ON items.item_id = details.item_id
+  GROUP BY items.item_id
+  LIMIT 3
+  ';
+  return fetch_all_query($db, $sql);
+}
